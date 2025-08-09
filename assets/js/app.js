@@ -286,16 +286,21 @@ function initTipstersData() {
 
 function addNewTipster() {
   showPrompt('New tipster name:', '', (name) => {
-    if (name && !APP_STATE.tipstersData[name]) {
-      APP_STATE.tipstersData[name] = {
+    const trimmed = (name || '').trim();
+    if (!trimmed) return;
+    if (!APP_STATE.tipstersData[trimmed]) {
+      APP_STATE.tipstersData[trimmed] = {
         initial_capital: DEFAULT_INITIAL_CAPITAL,
         current_capital: DEFAULT_INITIAL_CAPITAL,
         initial_set: true
       };
       normalizeDefaultTipsterNames();
       saveToStorage();
-      refreshUI(); // repopulate selects after insertion
-      showNotification(`${name} added successfully!`, 'success');
+      // Repopulate selects and preselect the newly created tipster
+      populateSelects();
+      DOM.tipsterSelect.value = trimmed;
+      refreshUI();
+      showNotification(`${trimmed} added successfully!`, 'success');
     }
   });
 }
@@ -1434,7 +1439,7 @@ function populateSelects() {
 
 function getSortedTipsterNames() {
   const names = Object.keys(APP_STATE.tipstersData);
-  const custom = names.filter(n => !isDefaultName(n)); // megtartjuk a meglévő sorrendet
+  const custom = names.filter(n => !isDefaultName(n));
   const defaults = names
     .filter(isDefaultName)
     .sort((a, b) => parseInt(a.split(' ')[1], 10) - parseInt(b.split(' ')[1], 10));
