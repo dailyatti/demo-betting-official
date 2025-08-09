@@ -285,7 +285,7 @@ function initTipstersData() {
 }
 
 function addNewTipster() {
-  showPrompt('Új tippadó neve:', '', (name) => {
+  showPrompt('New tipster name:', '', (name) => {
     if (name && !APP_STATE.tipstersData[name]) {
       APP_STATE.tipstersData[name] = {
         initial_capital: DEFAULT_INITIAL_CAPITAL,
@@ -294,15 +294,15 @@ function addNewTipster() {
       };
       normalizeDefaultTipsterNames();
       saveToStorage();
-      refreshUI(); // populateSelects újrarendez
-      showNotification(`${name} sikeresen hozzáadva!`, 'success');
+      refreshUI(); // repopulate selects after insertion
+      showNotification(`${name} added successfully!`, 'success');
     }
   });
 }
 
 function setTipsterCapital(name) {
   const data = APP_STATE.tipstersData[name];
-  showPrompt(`Kezdő tőke ${name} számára:`, data.initial_capital.toString(), (value) => {
+  showPrompt(`Initial capital for ${name}:`, data.initial_capital.toString(), (value) => {
     const capital = parseFloat(value);
     if (!isNaN(capital) && capital >= 0) {
       const diff = capital - data.initial_capital;
@@ -315,7 +315,7 @@ function setTipsterCapital(name) {
       }
       saveToStorage();
       refreshUI();
-      showNotification('Tőke sikeresen beállítva!', 'success');
+      showNotification('Capital set successfully!', 'success');
     }
     // ha érvénytelen input, akkor is frissítünk hogy bezárás után friss UI legyen
     else {
@@ -367,7 +367,7 @@ function handleAddBet(e) {
     Math.abs(b.odds - bet.odds) < 1e-9
   );
   if (dup) {
-    showAlert('Duplikált fogadásnak tűnik (azonos tippadó/csapat/dátum/tét/szorzó).', 'warning');
+    showAlert('This bet seems to be a duplicate (same tipster/team/date/stake/odds).', 'warning');
     return;
   }
 
@@ -1108,11 +1108,11 @@ function initCharts() {
     data: {
       labels: [],
       datasets: [{
-        label: 'Nyert',
+        label: 'Won',
         data: [],
         backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--success')
       }, {
-        label: 'Vesztett',
+        label: 'Lost',
         data: [],
         backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--error')
       }]
