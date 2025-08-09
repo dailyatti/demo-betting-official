@@ -1642,6 +1642,8 @@ function viewTipsterDetails(name) {
   DOM.modalMessage.innerHTML = detailsHTML;
   DOM.modalTitle.textContent = 'Tipster Details';
   DOM.modalOverlay.classList.add('show');
+  // Ensure OK button also closes the modal for info-only dialogs
+  DOM.modalConfirmBtn.onclick = () => closeModal();
 }
 
 function handleKeyboardShortcuts(e) {
